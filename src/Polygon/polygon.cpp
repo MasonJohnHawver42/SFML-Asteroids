@@ -5,19 +5,30 @@ class Polygon : public Shape {
 private:
   vector<Vertex *> * vertices;
 
+  double size;
+
 public:
 
   Polygon () {
     vertices = new vector<Vertex *>();
+
+    size = 0;
   }
 
   //getters
+  double getSize() { return size; }
 
   int getNumVertices() { return vertices->size(); }
 
   Vertex getVertex(int vertexNum) { return * vertices->at(validVertexNum(vertexNum)); }
 
-  // modifiersS
+  double getArea() { return M_PI * ( size * size); }
+
+  //setters
+
+  void setSize(double s) { size = s; }
+
+  // modifiers
 
   bool addVertex(Vector<double> * loc) {
     Vertex * newVert = new Vertex();
@@ -31,6 +42,8 @@ public:
     {
 
       vertices->insert(vertices->begin() + (vertices->size()), newVert);
+
+      size = max(size, newVert->getLoc()->getMag());
 
       return 1;
     }
@@ -57,9 +70,10 @@ public:
     int vn = vertices->size();
 
     if(vn > 0) {
+
       Vector<double> * last = vertices->at(0)->getLoc();
 
-      for(int i = 1; i <= vn; i++) {
+      for( int i = 1; i <= vn; i++ ) {
 
         Vector<double> * curr = vertices->at(validVertexNum(i))->getLoc();
 
@@ -74,15 +88,22 @@ public:
         v2->add(*pos);
 
 
-        sf::ConvexShape * partialPolygon = new sf::ConvexShape(3);
+        sf::ConvexShape partialPolygon;
 
-        partialPolygon->setPoint(0, sf::Vector2f(pos->getX(), pos->getY()));
-        partialPolygon->setPoint(1, sf::Vector2f(v1->getX(), v1->getY()));
-        partialPolygon->setPoint(2, sf::Vector2f(v2->getX(), v2->getY()));
+        partialPolygon.setPointCount(3);
 
-        window->draw(*partialPolygon);
+        partialPolygon.setPoint(0, sf::Vector2f(pos->getX(), pos->getY()));
+        partialPolygon.setPoint(1, sf::Vector2f(v1->getX(), v1->getY()));
+        partialPolygon.setPoint(2, sf::Vector2f(v2->getX(), v2->getY()));
+
+        //partialPolygon->setOutlineColor(sf::Color::Blue);
+        //partialPolygon->setOutlineThickness(1);
+
+        window->draw(partialPolygon);
 
         last = curr;
+
+        delete v1, v2, curr, partialPolygon;
       }
 
     }
