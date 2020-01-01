@@ -118,7 +118,7 @@ public:
       double mySize = body->getSize();
       double otherSize = other->getBody()->getSize();
 
-      if (dis < 0 ) {
+      if ( dis < min(mySize, otherSize) / -2 ) {
 
         double flip = (pos->getX() < other->getPos()->getX() ? 1 : -1);
 
