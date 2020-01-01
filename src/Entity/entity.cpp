@@ -98,17 +98,54 @@ public:
 
   // other
 
-  virtual bool collide(Entity * other) {
+  double getDis(Entity * other) {
     double dis = pos->getDis(*other->getPos());
     dis = dis - body->getSize() - other->getBody()->getSize();
 
-    if( dis > 0 ) { return 0; }
+    return dis;
+  }
 
-    else {
+  virtual bool collide(Entity * other) {
+
+    double dis = getDis(other);
+
+    if( dis <= 0 ) {
 
       Vector<double> * posDiff = Vector<double>::sub(*pos, *other->getPos());
 
       double slope = posDiff->getY() / posDiff->getX();
+
+      double mySize = body->getSize();
+      double otherSize = other->getBody()->getSize();
+
+      if (dis < 0 ) {
+
+        double flip = (pos->getX() < other->getPos()->getX() ? 1 : -1);
+
+        double myDis = ( dis * flip ) / ( 1 + ( mySize / otherSize ) );
+        double otherDis = ( myDis * flip ) * ( mySize / otherSize );
+
+        Vector<double> * myShiftedPos = new Vector<double>(pos->getX(), pos->getY());
+        myShiftedPos->sub(*pos);
+
+        Vector<double> * otherShiftedPos = new Vector<double>(other->getPos()->getX(), other->getPos()->getY());
+        otherShiftedPos->sub(*pos);
+
+        Vector<double> * myNewPos = new Vector<double>(0,0);
+        myNewPos->setX( ( ( myDis > 0 ? 1 : -1 ) * sqrt( (myDis * myDis) / ( 1 + ( slope * slope ) ) ) ) + myShiftedPos->getX() );
+        myNewPos->setY( myNewPos->getX() * slope );
+
+        Vector<double> * otherNewPos = new Vector<double>(0,0);
+        otherNewPos->setX( ( ( otherDis > 0 ? 1 : -1 ) * sqrt( (otherDis * otherDis) / ( 1 + ( slope * slope ) ) ) ) + otherShiftedPos->getX() );
+        otherNewPos->setY( otherNewPos->getX() * slope );
+
+        myNewPos->add(*pos);
+        otherNewPos->add(*pos);
+
+        setPos(myNewPos);
+        other->setPos(otherNewPos);
+
+      }
 
       double b1 = vel->getY() + ( vel->getX() / slope );
       double b2 = other->getVel()->getY() + ( other->getVel()->getX() / slope );
@@ -152,10 +189,10 @@ public:
       setVel(myNewVel);
       other->setVel(otherNewVel);
 
+      return 1;
     }
 
-
-    return 1;
+    return 0;
   }
 
 
@@ -167,4 +204,3 @@ public:
 };
 
 int Entity::nextId = 0;
-
