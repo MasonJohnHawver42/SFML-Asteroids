@@ -20,11 +20,12 @@ private:
 public:
   World() {
     entities = new vector<Entity*>();
+    asteroids = new vector<Entity*>();
 
     origon = new Vector<double>(0, 0);
 
-    width = 50;
-    height = 25;
+    width = 100;
+    height = 50;
   }
 
   //getters
@@ -65,7 +66,9 @@ public:
   bool addAsteroid(Entity * asteroid) {
 
     if (addEntity(asteroid)) {
+
         asteroids->push_back(asteroid);
+
         return 1;
     }
 
@@ -98,6 +101,12 @@ public:
   void update() {
     for(int i = 0; i < entities->size(); i++) {
       Entity * curr = entities->at(i);
+
+      for(int j = i + 1; j < entities->size(); j++) {
+        Entity * other = entities->at(j);
+
+        curr->collide(other);
+      }
 
       curr->update();
     }
