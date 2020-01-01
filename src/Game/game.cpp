@@ -6,9 +6,21 @@ void play() {
 
   Ship * ship = new Ship();
 
-  ship->setVel(new Vector<double>(10, 0));
+  ship->setVel(new Vector<double>(0, 0));
 
-  world->addEntity(ship);
+  ship->setWorld(world);
+
+  Asteroid * aster = new Asteroid(14, 6.0);
+
+  aster->getVel()->setX(-10);
+  aster->getVel()->setY(0);
+
+  aster->getPos()->setX(50);
+  aster->getPos()->setY(.001);
+
+  aster->setTurningVel(-4 / 10.0);
+
+  aster->setWorld(world);
 
   Viewer * camera = new Viewer();
 
@@ -25,9 +37,10 @@ void play() {
         window->close();
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { ship->addAcc( ship->getDir() ); }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { ship->addTurningAcc(10); }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) { ship->addTurningAcc(-10); }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { ship->thrust(); }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { ship->addTurningAcc(5); }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) { ship->addTurningAcc(-5); }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { ship->shoot(); }
 
     window->clear();
 
