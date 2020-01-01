@@ -26,6 +26,9 @@ public:
   void setX(T newX);
   void setY(T newY);
 
+  void setVector(T newX, T newY);
+  void setVector(Vector<T> vect);
+
   void add(Vector<T> other);
   void sub(Vector<T> other);
   void mult(Vector<T> other);
@@ -79,6 +82,9 @@ template<class T> double Vector<T>::getMag() { return sqrt(pow(x, 2) + pow(y, 2)
 
 template<class T> void Vector<T>::setX(T newX) { x = newX; }
 template<class T> void Vector<T>::setY(T newY) { y = newY; }
+
+template<class T> void Vector<T>::setVector(T newX, T newY) { x = newX; y = newY; }
+template<class T> void Vector<T>::setVector(Vector<T> vect) { x = vect.getX(); y = vect.getY(); }
 
 // mutators :
 
