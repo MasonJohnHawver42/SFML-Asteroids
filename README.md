@@ -8,7 +8,7 @@ Asteroids, but with elastic collisions ( so it's really billards in space ).
 goto the ./run file.
 
 # Bugs
-  - things ( Entities ) can get stuck in each other. ( this is fixable )
+  - things ( Entities ) can get stuck in each other. ( this is fixable ) ( fixed ! )
   - Collisions parrawell with the x or y axis will cause a seg-fault. ( this is also fixable )
 
 # TODO
@@ -21,7 +21,7 @@ goto the ./run file.
 
 All the maths for the elastic collisions between circles:
   - https://www.desmos.com/calculator/dpc3hnnecx ( This isn the heart of how the collitions work. )
-  - https://www.desmos.com/calculator/o34kvvpife ( This fixes the first bug, but hasn't been implemented in the code yet. )
+  - https://www.desmos.com/calculator/o34kvvpife ( This fixes the first bug )
   - https://www.desmos.com/calculator/rgubue9cri ( This sums up everything; however, its not compete. )
 
 
