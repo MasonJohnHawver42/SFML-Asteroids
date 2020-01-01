@@ -1,6 +1,13 @@
-#include "worldEntity.cpp"
+#include "bullet.cpp"
 
 class Ship : public WorldEntity {
+private:
+  double velHalfLife;
+  double turningHalfLife;
+
+  sf::Clock * reloadTimer;
+  double reloadTime;
+
 public:
   Ship() : WorldEntity() {
     Polygon * newBody = new Polygon();
@@ -13,87 +20,83 @@ public:
     newBody->addVertex(new Vector<double>(x, -x));
 
     setBody(newBody);
+
+    maxSpeed = 70;
+    maxAcc = 50;
+
+    maxTSpeed = 7;
+    maxTAcc = 1;
+
+    velHalfLife = 5;
+    turningHalfLife = 1 / 20.0;
+
+    reloadTimer = new sf::Clock();
+    reloadTime = 1 / 10.0;
+
+    density = 5.0;
   }
 
-  virtual void draw(sf::RenderWindow * window, Vector<double>* pos1, Vector<double>* scale) {
-    double rad = dir->getRad() - (M_PI / 1.0);
-    body->draw(window, pos1, rad, scale);
+  double getReloadTimer() { return reloadTimer->getElapsedTime().asSeconds(); }
+
+  void thrust() {
+
+    Vector<double> * addAcc = new Vector<double>(maxAcc, maxAcc);
+    addAcc->mult(*dir);
+
+    acc->add(*addAcc);
+    delete addAcc;
+  }
+
+  bool shoot() {
+
+    if(getReloadTimer() > reloadTime) {
+      Bullet * bill = new Bullet();
+
+      Vector<double> * d = new Vector<double>(dir->getX(), dir->getY());
+
+      bill->setDir(d->getRad() + (M_PI / 2.0));
+
+      bill->getPos()->setX(pos->getX());
+      bill->getPos()->setY(pos->getY());
+
+      bill->getPos()->add(*Vector<double>::mult(*new Vector<double>(2,2), *dir));
+
+      bill->setWorld(world);
+
+      bill->getVel()->add(*vel);
+
+      bill->updateAcc();
+
+      reloadTimer->restart();
+
+      return 1;
+    }
+
+    else { return 0; }
   }
 
   virtual void update() {
+    applyVel();
 
-    double timeJump = clock->getElapsedTime().asSeconds();
+    warpPos(1, 1);
+
+    updateVel();
+
+    updateAcc();
+
+    applyFriction(getFrictionRate(velHalfLife));
+
+    updateDir();
+
+    applyTurningFriction(getFrictionRate( turningHalfLife ));
+
+    updateTurningVel();
+
+    updateTurningAcc();
+
     clock->restart();
-
-
-
-    Vector<double> * fv = Vector<double>::mult(*vel, * new Vector<double>(timeJump, timeJump));
-    pos->add(*fv);
-
-    Vector<double> * dim = new Vector<double>(world->getWidth(), world->getHeight());
-    dim->div(2);
-
-    Vector<double> * shiftedPos = Vector<double>::sub(*pos, *(world->getOrigon()));
-    shiftedPos->add(*dim);
-
-    dim->mult(2.0);
-
-    Vector<double> * warpedPos = Vector<double>::div(*shiftedPos, *dim);
-
-    warpedPos->setX(floor(warpedPos->getX()));
-    warpedPos->setY(floor(warpedPos->getY()));
-
-    warpedPos->mult(*dim);
-    warpedPos->mult(-1.0);
-
-    warpedPos->add(*shiftedPos);
-
-    warpedPos->add(*world->getOrigon());
-
-    dim->div(2.0);
-
-    warpedPos->sub(*dim);
-
-    pos = warpedPos;
-
-    double halfLife = 5.0;
-
-    double frictionRate = pow(pow(.5, (1 / halfLife)), timeJump);
-
-    vel->mult(frictionRate);
-
-    double maxChange = 1 / 200.0;
-
-    acc->limitMag(maxChange);
-
-    vel->add(*acc);
-
-    double maxSpeed = 100;
-
-    vel->limitMag(maxSpeed);
-
-    acc->mult(0);
-
-    dir->turn(timeJump * turningVel);
-
-    double turningHalfLife = 1 / 40.0;
-
-    frictionRate = pow(pow(.5, (1 / turningHalfLife)), timeJump);
-
-    turningVel *= frictionRate;
-
-    double maxChangeInTurn = 3;
-
-    if(abs(turningAcc) > maxChangeInTurn) { turningAcc /= abs(turningAcc); turningAcc *= maxChangeInTurn; }
-
-    turningVel += turningAcc;
-
-    double maxTurningVel = 10;
-
-    if(abs(turningVel) > maxTurningVel) { turningVel /= abs(turningVel); turningVel *= maxTurningVel; }
-
-    turningAcc = 0;
 
     return;
   }
+
 };
