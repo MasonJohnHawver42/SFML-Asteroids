@@ -29,7 +29,9 @@ All the maths for projecting the world onto a screen:
   - https://www.desmos.com/calculator/wv0pnjhr26 ( it scales and shifts everything into their apropiate position on the screen )
  
 # Video ( Youtube )
-https://youtu.be/4oIpK1rjBes ( V1 )
+ - https://youtu.be/4oIpK1rjBes ( V1 )
+
+
 There will be a another video once I've finished my TODO list and some of the bugs.
  
 # Collisions
