@@ -30,6 +30,7 @@ All the maths for projecting the world onto a screen:
  
 # Video ( Youtube )
  - https://youtu.be/4oIpK1rjBes ( V1 )
+ - https://youtu.be/M-CEo-lhDqE ( Still V1 but with max potential )
 
 
 There will be a another video once I've finished my TODO list and some of the bugs.
