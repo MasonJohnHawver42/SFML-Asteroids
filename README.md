@@ -13,8 +13,7 @@ goto the ./run file.
 
 # TODO
   - be able to break off pieces of the asteroid, so make them destroy-able. ( done! see the video ( V1 ) )
-  - uplift the graphics.
-  - add different types of weapons ( misiles, lasers, bullets, etc ).
+  - uplift the graphics
   - add collisions between polygons ( convex then maybe concave ) ( currently everything is simplified to a circle when there is a collision; this method isn't horrible, so this probaly won't change; however, collisions between pollygons can entail a more relistic system and more interesting gameplay. For example, a laser could crudly cut pieces of the asteroid off insead of the asteroid simply imploding after a number of hits. In conclution, maybe; however, there is a decent chance, so probaly yes. )
    
 # Demos on Desmos
@@ -30,13 +29,4 @@ All the maths for projecting the world onto a screen:
  
 # Video ( Youtube )
  - https://youtu.be/4oIpK1rjBes ( V1 )
- - https://youtu.be/M-CEo-lhDqE ( Still V1 but with max potential )
-
-
-There will be a another video once I've finished my TODO list and some of the bugs.
- 
-# Collisions
-( explination comming soon ) ( I might also post a video on how they work )
- 
- 
- -mcmc
+ - https://youtu.be/M-CEo-lhDqE ( Still V1 but with a moving camera )
